@@ -6,8 +6,9 @@ import javafx.scene.chart.*;
 
 import java.net.URL;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Main application controller
@@ -84,6 +85,42 @@ public class Controller implements Initializable {
         meanX.setLabel("Décénie");
         meanY.setLabel("Variation moyenne");
 
+        XYChart.Series<String, Double> gcag = new XYChart.Series<>();
+        XYChart.Series<String, Double> gistemp = new XYChart.Series<>();
+
+        /*
+        // NOTE: Désolé j'ai plus le temps, mais j'étais pas si loin, manquait juste les moyennes
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = new GregorianCalendar();
+
+        for(List<String> line : temperatureData) {
+
+
+            if(line.size() == 3) {
+
+                try {
+                    Date date = sdf.parse(line.get(1));
+                    calendar.setTime(date);
+
+                    int year = calendar.get(Calendar.YEAR);
+                    int decade = (int)(10*Math.floor((double)year / (double)10));
+
+                    if(line.get(0).equalsIgnoreCase("GCAG")) {
+                        gcag.getData().add(new XYChart.Data<>(String.valueOf(decade), Double.parseDouble(line.get(3))));
+                    }
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }*/
+
+        meanGraph.setData(FXCollections.observableArrayList(gcag, gistemp));
+
+        // Un exemple pour tester
         /*XYChart.Series<String, Double> a = new XYChart.Series<>();
         XYChart.Series<String, Double> b = new XYChart.Series<>();
 
