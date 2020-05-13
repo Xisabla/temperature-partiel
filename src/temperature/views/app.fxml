@@ -5,6 +5,8 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
 <HBox fx:controller="temperature.Controller"
       xmlns:fx="http://javafx.com/fxml">
 
@@ -22,12 +24,29 @@
         <Tab text="Evolution Taille Glaciers">
             <LineChart fx:id="glacierGraph">
                 <xAxis>
-                    <NumberAxis fx:id="glacierX" side="BOTTOM" autoRanging="false" />
+                    <NumberAxis fx:id="glacierYear" side="BOTTOM" autoRanging="false" />
                 </xAxis>
                 <yAxis>
-                    <NumberAxis fx:id="glacierY" side="LEFT" />
+                    <NumberAxis fx:id="glacierVariation" side="LEFT" />
                 </yAxis>
             </LineChart>
+        </Tab>
+        <Tab text="Variation Moyenne Température Terrestre">
+            <BarChart fx:id="meanGraph">
+                <xAxis>
+                    <CategoryAxis fx:id="meanX" />
+                </xAxis>
+                <yAxis>
+                    <NumberAxis fx:id="meanY" />
+                </yAxis>
+
+                <!--<xAxis>
+                    <NumberAxis fx:id="meanX" side="BOTTOM" autoRanging="false" />
+                </xAxis>
+                <yAxis>
+                    <NumberAxis fx:id="meanY" side="LEFT" />
+                </yAxis>-->
+            </BarChart>
         </Tab>
     </TabPane>
 </HBox>

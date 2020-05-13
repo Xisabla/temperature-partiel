@@ -1,9 +1,8 @@
 package temperature;
 
+import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 
 import java.net.URL;
 import java.nio.file.Paths;
@@ -34,8 +33,28 @@ public class Controller implements Initializable {
     /**
      * Glacier graph axis (X and Y)
      */
-    public NumberAxis glacierX;
-    public NumberAxis glacierY;
+    public NumberAxis glacierYear;
+    public NumberAxis glacierVariation;
+
+    /**
+     * Mean Temperature graph
+     */
+    public BarChart<String, Double> meanGraph;
+
+    /**
+     * Mean Temperature axis (X and Y)
+     */
+    public CategoryAxis meanX;
+    public NumberAxis meanY;
+
+    /**
+     * Data queried from the temperature file
+     */
+    List<List<String>> temperatureData;
+    /**
+     * Data queried from the glacier file
+     */
+    List<List<String>> glacierData;
 
     /**
      * Initializes the application content
@@ -43,19 +62,68 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        // Query all the needed data
+        queryTemperatureData();
+        queryGlacierData();
+
         // Set labels for the temperature graph
-        tempX.setLabel("Date");
-        tempX.setLabel("Evolution de la température");
+        tempX.setLabel("Temps");
+        tempY.setLabel("Evolution de la température");
 
         // Query data and fill temperature series
         plotTemperatures();
 
         // Set labels for the glacier graph
-        glacierX.setLabel("Année");
-        glacierY.setLabel("Evolution de la taille (%)");
+        glacierYear.setLabel("Année");
+        glacierVariation.setLabel("Evolution de la taille (%)");
 
         // Query data and fill glaciers series
         plotGlacier();
+
+        // WIP
+        meanX.setLabel("Décénie");
+        meanY.setLabel("Variation moyenne");
+
+        /*XYChart.Series<String, Double> a = new XYChart.Series<>();
+        XYChart.Series<String, Double> b = new XYChart.Series<>();
+
+        a.getData().add(new XYChart.Data<String, Double>("2000", 2.));
+        a.getData().add(new XYChart.Data<String, Double>("2001", 2.));
+        b.getData().add(new XYChart.Data<String, Double>("2000", 3.));
+        b.getData().add(new XYChart.Data<String, Double>("2001", 4.));
+
+        a.setName("A series");
+        b.setName("B series");
+
+        meanGraph.setData(FXCollections.observableArrayList(a, b));*/
+
+    }
+
+    /**
+     * Query the temperature data from the temperature file
+     */
+    private void queryTemperatureData() {
+
+        // Get the file path
+        String file = this.getClass().getResource("/temperature/data/temperature.txt").toString().replace("file:/","");
+        String finalFile = Paths.get(file).toAbsolutePath().normalize().toString();
+
+        // Return the file data
+        temperatureData = FileReader.read(finalFile, 1);
+
+    }
+
+    /**
+     * Query the glacier data from the glacier file
+     */
+    private void queryGlacierData() {
+
+        // Get the file path
+        String file = this.getClass().getResource("/temperature/data/glaciers.txt").toString().replace("file:/","");
+        String finalFile = Paths.get(file).toAbsolutePath().normalize().toString();
+
+        // Return the file data
+        glacierData = FileReader.read(finalFile, 1);
 
     }
 
@@ -72,19 +140,12 @@ public class Controller implements Initializable {
         final XYChart.Series<Double, Double> gistemp = new XYChart.Series<>();
         gistemp.setName("GISTEMP");
 
-        // Get the file path
-        String file = this.getClass().getResource("/temperature/data/temperature.txt").toString().replace("file:/","");
-        String finalFile = Paths.get(file).toAbsolutePath().normalize().toString();
-
-        // Query the file content
-        List<List<String>> lines = FileReader.read(finalFile, 1);
-
         // Will be used to set bounds
         double min = Double.MAX_VALUE;
         double max = Double.MIN_VALUE;
 
         // Read each line
-        for(List<String> line : lines) {
+        for(List<String> line : temperatureData) {
 
             // Check that the line has the good length
             if(line.size() == 3) {
@@ -130,18 +191,11 @@ public class Controller implements Initializable {
         final XYChart.Series<Double, Double> sizes = new XYChart.Series<>();
         sizes.setName("Variation");
 
-        // Get the file path
-        String file = this.getClass().getResource("/temperature/data/glaciers.txt").toString().replace("file:/","");
-        String finalFile = Paths.get(file).toAbsolutePath().normalize().toString();
-
-        // Query the file content
-        List<List<String>> lines = FileReader.read(finalFile, 1);
-
         // Will be used to set bounds
         double min = Double.MAX_VALUE;
         double max = Double.MIN_VALUE;
 
-        for(List<String> line : lines) {
+        for(List<String> line : glacierData) {
 
             // Check that the line has the good minimal length
             if(line.size() >= 2) {
@@ -161,8 +215,8 @@ public class Controller implements Initializable {
         }
 
         // Set the bounds
-        glacierX.setLowerBound(min);
-        glacierX.setUpperBound(max);
+        glacierYear.setLowerBound(min);
+        glacierYear.setUpperBound(max);
 
         // Add the series to the graph
         glacierGraph.getData().add(sizes);
