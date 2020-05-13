@@ -1,0 +1,33 @@
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<HBox fx:controller="temperature.Controller"
+      xmlns:fx="http://javafx.com/fxml">
+
+    <TabPane prefHeight="1000.0" prefWidth="1920.0" tabClosingPolicy="UNAVAILABLE">
+        <Tab text="Evolution Température terrestre">
+            <LineChart fx:id="tempGraph">
+                <xAxis>
+                    <NumberAxis fx:id="tempX" side="BOTTOM" autoRanging="false" />
+                </xAxis>
+                <yAxis>
+                    <NumberAxis fx:id="tempY" side="LEFT" />
+                </yAxis>
+            </LineChart>
+        </Tab>
+        <Tab text="Evolution Taille Glaciers">
+            <LineChart fx:id="glacierGraph">
+                <xAxis>
+                    <NumberAxis fx:id="glacierX" side="BOTTOM" autoRanging="false" />
+                </xAxis>
+                <yAxis>
+                    <NumberAxis fx:id="glacierY" side="LEFT" />
+                </yAxis>
+            </LineChart>
+        </Tab>
+    </TabPane>
+</HBox>
